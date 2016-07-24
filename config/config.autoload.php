@@ -5,7 +5,7 @@
  *
  * @package None
  * @author  Jan Rainier Llarenas
- * @license none
+ * @license MIT
  */
 
 

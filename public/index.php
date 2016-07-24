@@ -5,7 +5,7 @@
  *
  * @package None
  * @author  Jan Rainier Llarenas
- * @license none
+ * @license MIT
  * @link https://docs.phalconphp.com/en/latest/reference/tutorial-rest.html
 */
 
@@ -33,15 +33,6 @@ $app->setAutoload($autoLoad, $appDir);
 // Define the routes here
 $app->setRoutes();
 
-$app->before(function () use ($app) {
-    return true;
-});
-
-$app->after(function () use ($app) {
-    $records = $app->getReturnedValue();
-	return JsonResponse::make(array($records), 200)->send();
-});
-
 $app->options('/([a-z0-9/]+)', function() {
     $response = new Response();
     $response->setHeader('Access-Control-Allow-Origin', '*');
@@ -50,6 +41,18 @@ $app->options('/([a-z0-9/]+)', function() {
     return $response;
 });
 
+// Before Execute Routes
+$app->before(function () use ($app) {
+    return true;
+});
+
+// After Execute Routes
+$app->after(function () use ($app) {
+    $records = $app->getReturnedValue();
+	return JsonResponse::make(array($records), 200)->send();
+});
+
+// Route NotFound
 $app->notFound(function () use ($app) {
 	JsonResponse::make('Url Not found', 404)->send();
 });
