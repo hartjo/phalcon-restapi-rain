@@ -22,6 +22,6 @@ This README would normally document whatever steps are necessary to get your app
 
 ### Who do I talk to? ###
 
-* Owner Jan Rainier Llarenas <llarenasjanrainier@gmail.som>
+* Owner Jan Rainier Llarenas <llarenasjanrainier@gmail.com>
 * Contributor Neil Male
 * Other community or team contact
