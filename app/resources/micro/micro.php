@@ -19,9 +19,15 @@ class Micro extends \Phalcon\Mvc\Micro {
 
 	public $appDir;
 
+	protected $_routeAllowed;
+
 	// constuct
 	public function __construct() {
-        $this->_noAuthPages = array();
+		$this->_routeAllowed = array();
+	}
+
+	public function routeAllowed(){
+		return $this->_routeAllowed;
 	}
 
 	// set autoload components
@@ -59,10 +65,9 @@ class Micro extends \Phalcon\Mvc\Micro {
 				$prefixrplc =  str_replace('/', '',$getcollection['prefix']);
 
 				if($prefixrplc == $getreqPrefix[1]){
-					$collections[] = $this->microCollection($getcollection);
+					$collections[] = $this->buildcollection($getcollection);
 				}
 
-				
 			}
 		}
 
@@ -71,9 +76,10 @@ class Micro extends \Phalcon\Mvc\Micro {
 		}
 	
 	}
+	//end of setRoutes
 
-	//create route collection
-	private function microCollection($route){
+	//build route collection
+	private function buildcollection($route){
 
 		$cltn = new Collection();
 
@@ -81,27 +87,27 @@ class Micro extends \Phalcon\Mvc\Micro {
 			->setHandler($route['handler'])
 			->setLazy($route['lazy']);
 
-		foreach($route['collection'] as $r){
+		foreach($route['collection'] as $obj){
 
-			if($r['authentication']===false){
+			if($obj['authentication']===false){
 
-				$method = strtolower($r['method']);
+				$method = strtolower($obj['method']);
 
-				if (! isset($this->_noAuthPages[$method])) {
-					$this->_noAuthPages[$method] = array();
+				if (!isset($this->_routeAllowed[$method])) {
+					$this->_routeAllowed[$method] = array();
 				}
-
-				$this->_noAuthPages[$method][] = $route['prefix'].$r['route'];
+				$this->_routeAllowed[$method][] = $route['prefix'].$obj['route'];
 
 			}
 
-			$cltn->{$r['method']}($r['route'], $r['function']);
+			$cltn->{$obj['method']}($obj['route'], $obj['function']);
+
 		}
 
 		return $cltn;
 
 	}
-
+	//end of buildcollection
 
 
 }

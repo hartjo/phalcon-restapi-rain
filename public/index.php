@@ -9,10 +9,6 @@
  * @link https://docs.phalconphp.com/en/latest/reference/tutorial-rest.html
 */
 
-use Phalcon\Mvc\Micro;
-use App\Response\JsonResponse;
-use \Phalcon\Http\Response;
-
 $dir = dirname(__DIR__);
 
 $appDir = $dir . '/app';
@@ -20,8 +16,13 @@ $configPath = $dir . '/config/';
 
 require $appDir . '/resources/response/JsonResponse.php';
 require $appDir . '/resources/micro/micro.php';
+require $appDir . '/resources/security/authentication.php';
 
 $autoLoad = $configPath . 'config.autoload.php';
+
+use Phalcon\Mvc\Micro;
+use App\Response\JsonResponse;
+use App\Security\SecurityApp;
 
 $app = new Application\Micro();
 
@@ -43,7 +44,8 @@ $app->options('/([a-z0-9/]+)', function() {
 
 // Before Execute Routes
 $app->before(function () use ($app) {
-    return true;
+	// var_dump($app->samplearray());
+    return SecurityApp::sample($app);
 });
 
 // After Execute Routes

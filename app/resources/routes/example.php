@@ -19,14 +19,14 @@
 				'method' => 'get',
 				'route' => 'post/ping',
 				'function' => 'postPing',
-				'authentication' => FALSE
+				'authentication' => TRUE
 			],
 
 			[
 				'method' => 'get',
 				'route' => 'get/ping',
 				'function' => 'getPing',
-				'authentication' => FALSE
+				'authentication' => TRUE
 			],
 
 			[
