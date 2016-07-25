@@ -16,7 +16,7 @@
 		'collection' => [
 		
 			[
-				'method' => 'get',
+				'method' => 'post',
 				'route' => 'post/ping',
 				'function' => 'postPing',
 				'authentication' => TRUE

@@ -6,7 +6,15 @@ class ExampleController extends \Phalcon\Mvc\Controller {
 
 
 	public function postPing() {
-		return "pong";
+        return "pong";
+    }
+
+    public function getPing() {
+        return "pong get";
+    }
+
+    public function putPing() {
+		return "pong put";
 	}
 
     public function testAction($id) {
