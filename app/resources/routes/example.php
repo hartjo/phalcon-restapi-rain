@@ -19,7 +19,7 @@
 				'method' => 'post',
 				'route' => 'post/ping',
 				'function' => 'postPing',
-				'authentication' => TRUE
+				'authentication' => FALSE
 			],
 
 			[

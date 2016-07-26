@@ -17,6 +17,9 @@ $configPath = $dir . '/config/';
 require $appDir . '/resources/response/JsonResponse.php';
 require $appDir . '/resources/micro/micro.php';
 require $appDir . '/resources/security/authentication.php';
+require $appDir . '/resources/debug/PhpError.php';
+
+register_shutdown_function(['Utilities\Debug\PhpError','runtimeShutdown']);
 
 $autoLoad = $configPath . 'config.autoload.php';
 
@@ -24,39 +27,57 @@ use Phalcon\Mvc\Micro;
 use App\Response\JsonResponse;
 use App\Security\SecurityApp;
 
-$app = new Application\Micro();
+try {
 
-$app->appDir = $appDir;
+	$app = new Application\Micro();
 
-// Define Autoloads here
-$app->setAutoload($autoLoad, $appDir);
+	set_error_handler(['Utilities\Debug\PhpError','errorHandler']);
 
-// Define the routes here
-$app->setRoutes();
+	$app->appDir = $appDir;
 
-$app->options('/([a-z0-9/]+)', function() {
-    $response = new Response();
-    $response->setHeader('Access-Control-Allow-Origin', '*');
-    $response->setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    $response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
-    return $response;
-});
+	// Define Autoloads here
+	$app->setAutoload($autoLoad, $appDir);
 
-// Before Execute Routes
-$app->before(function () use ($app) {
-	// var_dump($app->samplearray());
-    return SecurityApp::sample($app);
-});
+	// Define the routes here
+	$app->setRoutes();
 
-// After Execute Routes
-$app->after(function () use ($app) {
-    $records = $app->getReturnedValue();
-	return JsonResponse::make(array($records), 200)->send();
-});
+	$app->options('([a-z0-9/]+)', function() {
+	    $response = new Response();
+	    $response->setHeader('Access-Control-Allow-Origin', '*');
+	    $response->setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	    $response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+	    return $response;
+	});
 
-// Route NotFound
-$app->notFound(function () use ($app) {
-	JsonResponse::make('Url Not found', 404)->send();
-});
+	// Before Execute Routes
+	$app->before(function () use ($app) {
+		// var_dump($app->samplearray());
+	    return SecurityApp::sample($app);
+	});
 
-$app->handle();
+	// After Execute Routes
+	$app->after(function () use ($app) {
+	    $results = $app->getReturnedValue();
+	    if(is_array($results)){
+	    	return JsonResponse::make(array($results), 200)->send();
+	    }
+
+		JsonResponse::make('Return Value is not array', 405)->send();
+		die();
+		
+	});
+
+	// Route NotFound
+	$app->notFound(function () use ($app) {
+		JsonResponse::make('Url Not found', 404)->send();
+	});
+
+	// $app->error( function ($exception) { 
+	// 	JsonResponse::make($e->getMessage(), 500)->send();
+	// });
+
+	$app->handle();
+
+} catch(\Exception $e) {
+	JsonResponse::make($e->getMessage(), 500)->send();
+}

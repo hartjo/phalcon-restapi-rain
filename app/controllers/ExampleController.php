@@ -4,9 +4,8 @@ namespace Controllers;
 
 class ExampleController extends \Phalcon\Mvc\Controller {
 
-
 	public function postPing() {
-        return "pong";
+        return array('sad' =>'post pong');
     }
 
     public function getPing() {
@@ -36,4 +35,5 @@ class ExampleController extends \Phalcon\Mvc\Controller {
     public function deleteAction() {
     	return "pong - delete method";
     }
+    
 }
