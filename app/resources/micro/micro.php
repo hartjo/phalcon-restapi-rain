@@ -10,10 +10,12 @@
 
 namespace Application;
 
-use Phalcon\Loader;
-use Phalcon\Exception;
-use Phalcon\Mvc\Micro\Collection;
-use Phalcon\Http\Request;
+use Phalcon\Loader,
+	Phalcon\Exception,
+	Phalcon\Mvc\Micro\Collection,
+	Phalcon\Http\Request,
+	Phalcon\DI\FactoryDefault,
+	App\Response\JsonResponse;
 
 class Micro extends \Phalcon\Mvc\Micro {
 
@@ -30,11 +32,48 @@ class Micro extends \Phalcon\Mvc\Micro {
 		return $this->_routeAllowed;
 	}
 
+	public function setConfig($env) {
+
+		// define Dependency Injector
+		$di = new FactoryDefault();
+
+		// Set request di
+		$di->set("request", new Request());
+
+		// Set Envenronmental Variables
+		$di->set('env', new \Phalcon\Config(require $env));
+
+		// Set database for custom PDO
+		$di->set('db', function() use ($di) {
+
+			$type = strtolower($di->get('env')->database->adapter);
+			$creds = array(
+				'host' => $di->get('env')->database->host,
+				'username' => $di->get('env')->database->username,
+				'password' => $di->get('env')->database->password,
+				'dbname' => $di->get('env')->database->name
+			);
+
+			if ($type == 'mysql') {
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Mysql($creds);
+			} else if ($type == 'postgres') {
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Postgresql($creds);
+			} else if ($type == 'sqlite') {
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Sqlite($creds);
+			} else {
+				throw new Exception('Bad Database Adapter');
+			}
+
+			return $connection;
+		});
+		
+	}
+
 	// set autoload components
 	public function setAutoload($file, $appDir) {
 		
 		if (!file_exists($file)) {
-			throw new Exception('Unable to load autoloader file');
+			JsonResponse::make('Unable to load autoloader file', 500)->send();
 		}
 
 		$namespaces = include $file;
@@ -44,11 +83,9 @@ class Micro extends \Phalcon\Mvc\Micro {
 	}
 
 	//set routes collection
-	public function setRoutes() {
+	public function setRoutes($req) {
 
-		$req = new Request();
-
-		$reqUri = $req->getURI();
+		$reqUri = $req;
 
 		$getreqPrefix = explode('/', $reqUri);
 
@@ -84,8 +121,8 @@ class Micro extends \Phalcon\Mvc\Micro {
 		$cltn = new Collection();
 
 		$cltn->setPrefix($route['prefix'])
-			->setHandler($route['handler'])
-			->setLazy($route['lazy']);
+		->setHandler($route['handler'])
+		->setLazy($route['lazy']);
 
 		foreach($route['collection'] as $obj){
 

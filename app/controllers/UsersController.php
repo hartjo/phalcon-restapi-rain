@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-class UsersController extends \Phalcon\Mvc\Controller {
+class UsersController extends BaseController {
 
 
 	public function getUser() {

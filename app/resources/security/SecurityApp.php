@@ -14,8 +14,8 @@ use App\Response\JsonResponse;
 
 class SecurityApp {
 
-	public static function sample($app){
-
+	public static function jwtAuthentication($app){
+		//routes with authentication false
 		$method = strtolower($app->router->getMatchedRoute()->getHttpMethods());
 		$unAuthenticated = $app->routeAllowed();
 
@@ -26,6 +26,8 @@ class SecurityApp {
 				return true; 
 			} 
 		}
+
+		//user authentication logic here
 
 
 		JsonResponse::make('Your not allowed!', 401)->send();

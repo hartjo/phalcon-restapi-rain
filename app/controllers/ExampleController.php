@@ -2,12 +2,16 @@
 
 namespace Controllers;
 
-class ExampleController extends \Phalcon\Mvc\Controller {
+use Models\Users as Users;
+
+class ExampleController extends BaseController {
 
 	public function postPing() {
-        return array('sad' =>'post pong');
+        // $users = Users::find()->toArray();
+        $users = $this->customQuery("SELECT * FROM users");
+        return array('array' => $users);
     }
-
+    
     public function getPing() {
         return "pong get";
     }
