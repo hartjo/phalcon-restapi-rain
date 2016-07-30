@@ -10,12 +10,12 @@
 
 namespace Application;
 
-use Phalcon\Loader,
-	Phalcon\Exception,
-	Phalcon\Mvc\Micro\Collection,
-	Phalcon\Http\Request,
-	Phalcon\DI\FactoryDefault,
-	App\Response\JsonResponse;
+use Phalcon\Loader;
+use Phalcon\Exception;
+use Phalcon\Mvc\Micro\Collection;
+use Phalcon\Http\Request;
+use Phalcon\DI\FactoryDefault;
+use App\Response\JsonResponse;
 
 class Micro extends \Phalcon\Mvc\Micro {
 
@@ -74,6 +74,7 @@ class Micro extends \Phalcon\Mvc\Micro {
 		
 		if (!file_exists($file)) {
 			JsonResponse::make('Unable to load autoloader file', 500)->send();
+			exit();
 		}
 
 		$namespaces = include $file;

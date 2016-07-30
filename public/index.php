@@ -16,6 +16,7 @@ $configPath = $dir . '/config/';
 
 require $appDir . '/resources/micro/micro.php';
 require $appDir . '/resources/response/JsonResponse.php';
+require $appDir . '/resources/security/SecurityApp.php';
 
 $autoLoad = $configPath . 'config.autoload.php';
 $env = $configPath . 'config.env.php';
@@ -59,24 +60,24 @@ try {
 
 	    $results = $app->getReturnedValue();
 	    if(is_array($results)){
-	    	return JsonResponse::make(array($results), 200)->send();
+	    	JsonResponse::make(array($results), 200)->send();
+	    	return;
 	    }
 
-		return JsonResponse::make('Return Value is not array', 405)->send();
+		JsonResponse::make('Return Value is not an array', 405)->send();
+		return; 
 		
 	});
 
 	// Route NotFound
 	$app->notFound(function () use ($app) {
 		JsonResponse::make('Url Not found', 404)->send();
+		return;
 	});
-
-	// $app->error( function ($exception) { 
-	// 	JsonResponse::make($e->getMessage(), 500)->send();
-	// });
 
 	$app->handle();
 
 } catch(Exception $e) {
 	JsonResponse::make($e->getMessage(), 500)->send();
+	return;
 }

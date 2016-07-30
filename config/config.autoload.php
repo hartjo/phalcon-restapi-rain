@@ -10,7 +10,6 @@
 
 
 $autoload = [
-	'App\Security' => $appDir .'/resources/security/',
 	'Controllers' => $appDir .'/controllers/',
 	'Models' => $appDir .'/models/'
 ];
