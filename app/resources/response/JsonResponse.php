@@ -37,6 +37,45 @@ class JsonResponse{
 		return $response;
 	}
 
+	public static function error($result, $code = 200){
+		$responseArray = [
+			'status' => $code,
+			'status_message' => self::getResponseDescription($code),
+			'Error_message' => $result->getMessage(),
+			'dev' => $result->devMessage,
+			'Internal_code' => $result->errorCode,
+			'more' => $result->additionalInfo,
+		];
+
+		$response = new Response();
+		$response->setJsonContent($responseArray);
+		$response->setStatusCode($code);
+		$response->setHeader('Access-Control-Allow-Origin', '*');
+		$response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');    
+		$response->setContentType('application/json');
+
+		return $response;
+	}
+
+	public static function errorParse($result, $code = 200){
+		$responseArray = [
+			'status' => $code,
+			'status_message' => self::getResponseDescription($code),
+			'Error_message' => $result['message'],
+			'File' => $result['file'],
+			'Error_line' => $result['line'],
+		];
+
+		$response = new Response();
+		$response->setJsonContent($responseArray);
+		$response->setStatusCode($code);
+		$response->setHeader('Access-Control-Allow-Origin', '*');
+		$response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');    
+		$response->setContentType('application/json');
+
+		return $response;
+	}
+
 	public static function getResponseDescription($code){
 		$codes = array(
 

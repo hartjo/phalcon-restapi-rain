@@ -11,11 +11,10 @@
 namespace Application;
 
 use Phalcon\Loader;
-use Phalcon\Exception;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Http\Request;
 use Phalcon\DI\FactoryDefault;
-use App\Response\JsonResponse;
+use App\Exceptions\HTTPException;
 
 class Micro extends \Phalcon\Mvc\Micro {
 
@@ -61,7 +60,16 @@ class Micro extends \Phalcon\Mvc\Micro {
 			} else if ($type == 'sqlite') {
 				$connection =  new \Phalcon\Db\Adapter\Pdo\Sqlite($creds);
 			} else {
-				throw new Exception('Bad Database Adapter');
+
+				throw new HTTPException(
+					'Bad Database Adapter',
+					405,
+					array(
+						'dev' => 'Please Check your database adapter .',
+						'internalCode' => 'AD405',
+						'more' => 'use (mysql ,postgres, sqlite)'
+						)
+					);
 			}
 
 			return $connection;
@@ -73,8 +81,17 @@ class Micro extends \Phalcon\Mvc\Micro {
 	public function setAutoload($file, $appDir) {
 		
 		if (!file_exists($file)) {
-			JsonResponse::make('Unable to load autoloader file', 500)->send();
-			exit();
+		
+			throw new HTTPException(
+				'Unable to load autoloader file',
+				500,
+				array(
+					'dev' => 'Could not found autoload.php .',
+					'internalCode' => 'AU500',
+					'more' => 'Please Check your autoload path'
+					)
+				);
+
 		}
 
 		$namespaces = include $file;

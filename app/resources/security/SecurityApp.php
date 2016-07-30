@@ -10,7 +10,7 @@
 
 namespace App\Security;
 
-use App\Response\JsonResponse;
+use App\Exceptions\HTTPException;
 
 class SecurityApp {
 
@@ -29,9 +29,15 @@ class SecurityApp {
 
 		//user authentication logic here
 
-
-		JsonResponse::make('Your not allowed!', 401)->send();
-		return false;
+		throw new HTTPException(
+			'Your not allowed!.',
+			401,
+			array(
+				'dev' => 'Your not allowed!',
+				'internalCode' => 'AT401',
+				'more' => 'Your not allowed!'
+				)
+			);
 		
 	}
 
