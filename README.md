@@ -81,3 +81,4 @@ return $collection;
 
 * Owner Jan Rainier Llarenas <llarenasjanrainier@gmail.com>
 * Contributor Neil Male <neilmaledev@gmail.com>
+* Contributor Hazel Cajalne <hazelcajalne99@gmail.com>
