@@ -1,6 +1,8 @@
-# README #
+# Phalcon Micro Rest Api #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Phalcon Restful API that uses Phalcon Micro framework (works with Phalcon 2.0+ and 3.0)
+
+The framework requires PHP 5.4, 5.5, 5.6 and PHP7
 
 ### What is this repository for? ###
 
@@ -11,17 +13,71 @@ This README would normally document whatever steps are necessary to get your app
 ### How do I get set up? ###
 
 * Clone repo
-* change to root directory
+* change to root directory "cd phalcon-restapi-rain"
 * run "composer install" without qoute to install php classes
 
-### Contribution guidelines ###
+### Requirements ###
+---------
+PHP 5.4 or greater
 
-* Writing tests
-* Code review
-* Other guidelines
+Required PHP Modules
+- Phalcon (http://phalconphp.com/en/download)
+- PDO-MySQL
+
+Database Configuration
+--------------
+Open  `phalcon-restapi-rain/config/config.env.php` and setup your database connection credentials
+
+```php
+$settings = array(
+        'database' => array(
+                'adapter' => 'Mysql', /* Possible Values: Mysql, Postgres, Sqlite */
+                'host' => 'your_ip_or_hostname',
+                'username' => 'your_username',
+                'password' => 'your_password',
+                'name' => 'your_database_schema',
+                'port' => 3306
+        ),
+);
+```
+
+
+Routes
+-------------
+Routes are stored in `phalcon-restapi-rain/app/resources/routes/exaple.php` as an array. A route has a method (HEAD, GET, POST, PATCH, DELETE, OPTIONS), uri (which can contain regular expressions) and handler/controller to point to.
+
+```php
+  $collection = [
+		'prefix' => '/example/',
+		'handler' => 'Controllers\ExampleController',
+		'lazy' => TRUE,
+		'collection' => [
+		
+			[
+				'method' => 'post',
+				'route' => 'post/ping',
+				'function' => 'postPing',
+				'authentication' => FALSE
+			],
+			[
+				'method' => 'get',
+				'route' => 'get/ping',
+				'function' => 'getPing',
+				'authentication' => TRUE
+			],
+			[
+				'method' => 'put',
+				'route' => 'put/ping',
+				'function' => 'putPing',
+				'authentication' => FALSE
+			],
+		]
+	];
+	
+return $collection;
+```
 
 ### Who do I talk to? ###
 
 * Owner Jan Rainier Llarenas <llarenasjanrainier@gmail.com>
-* Contributor Neil Male
-* Other community or team contact
+* Contributor Neil Male <neilmaledev@gmail.com>
