@@ -41,10 +41,14 @@ $settings = array(
 );
 ```
 
+you can use my sample schema in `phalcon-restapi-rain/schema/rainrest.sql`
+
 
 Routes
 -------------
-Routes are stored in `phalcon-restapi-rain/app/resources/routes/exaple.php` as an array. A route has a method (HEAD, GET, POST, PATCH, DELETE, OPTIONS), uri (which can contain regular expressions) and handler/controller to point to.
+Routes are stored in `phalcon-restapi-rain/app/resources/routes` as an array. A route has a method (HEAD, GET, POST, PATCH, DELETE, OPTIONS), uri (which can contain regular expressions) and handler/controller to point to.
+
+`phalcon-restapi-rain/app/resources/routes/exaple.php`
 
 ```php
   $collection = [
@@ -59,23 +63,182 @@ Routes are stored in `phalcon-restapi-rain/app/resources/routes/exaple.php` as a
 				'function' => 'postPing',
 				'authentication' => FALSE
 			],
+
 			[
 				'method' => 'get',
-				'route' => 'get/ping',
+				'route' => 'get/ping/{id}',
 				'function' => 'getPing',
-				'authentication' => TRUE
+				'authentication' => FALSE
 			],
+
 			[
 				'method' => 'put',
 				'route' => 'put/ping',
 				'function' => 'putPing',
-				'authentication' => FALSE
+				'authentication' => TRUE
 			],
+
+			[
+				'method' => 'delete',
+				'route' => 'delete/ping',
+				'function' => 'deletePing',
+				'authentication' => FALSE
+			]
+
 		]
 	];
 	
 return $collection;
 ```
+
+`phalcon-restapi-rain/app/resources/routes/users.php`
+
+```php
+$collection = [
+	'prefix' => '/users/',
+	'handler' => 'Controllers\UsersController',
+	'lazy' => TRUE,
+	'collection' => [
+
+		[
+			'method' => 'get',
+			'route' => 'getuser',
+			'function' => 'getUser',
+			'authentication' => FALSE
+		],
+
+		[
+			'method' => 'post',
+			'route' => 'saveuser',
+			'function' => 'saveUser',
+			'authentication' => FALSE
+		]
+
+	]
+];
+
+return $collection;
+```
+
+
+Test Routes
+-------------
+to test route either use Postman plugin of google chrome or any other api testing application
+
+Note! change http://rainrestv1.dev use your own hostname
+
+POST Method
+url: http://rainrestv1.dev/example/post/ping
+
+Response : 
+```json
+{
+  "status": 200,
+  "status_message": "OK",
+  "result": [
+    {
+      "postpong": "pong - post method"
+    }
+  ],
+  "count": 1
+}
+```
+
+GET Method
+url: http://rainrestv1.dev/example/get/ping/12345
+
+Response : 
+```json
+{
+  "status": 200,
+  "status_message": "OK",
+  "result": [
+    {
+      "getpong": "pong - get method",
+      "id": "12345"
+    }
+  ],
+  "count": 1
+}
+```
+
+PUT Method
+url: http://rainrestv1.dev/example/put/ping
+
+Response : 
+```json
+{
+  "status": 200,
+  "status_message": "OK",
+  "result": [
+    {
+      "putpong": "pong - put method"
+    }
+  ],
+  "count": 1
+}
+```
+
+DELETE Method
+url: http://rainrestv1.dev/example/delete/ping
+
+Response : 
+```json
+{
+  "status": 200,
+  "status_message": "OK",
+  "result": [
+    {
+      "deletepong": "pong - delete method"
+    }
+  ],
+  "count": 1
+}
+```
+
+
+GET Method
+url: http://rainrestv1.dev/users/getuser
+
+Response : 
+```json
+{
+  "status": 200,
+  "status_message": "OK",
+  "result": [
+    {
+      "userlist": [
+        {
+          "id": "1",
+          "name": "Jan Rainier Llarenas",
+          "username": "superagent",
+          "password": "1234568"
+        },
+        {
+          "id": "2",
+          "name": "Janine Hazel Labadia",
+          "username": "superlady",
+          "password": "1234568"
+        },
+        {
+          "id": "3",
+          "name": "Heaven Leih Mojica",
+          "username": "superbabs",
+          "password": "12345678"
+        },
+        {
+          "id": "4",
+          "name": "Jonalyn Hazel Cajalne",
+          "username": "superslim",
+          "password": "1234568"
+        }
+      ]
+    }
+  ],
+  "count": 1
+}
+```
+
 
 ### Who do I talk to? ###
 

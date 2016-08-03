@@ -2,42 +2,44 @@
 
 namespace Controllers;
 
-use Models\Users as Users;
-
 class ExampleController extends BaseController {
 
 	public function postPing() {
-        // $users = Users::find()->toArray();
-        $users = $this->customQuery("SELECT * FROM users");
-        return array('array' => $users);
+      
+
+         // all return must be an array
+        return array(
+            'postpong'=>'pong - post method'
+            );
+
     }
     
-    public function getPing() {
-        return "pong get";
+    public function getPing($id) {
+
+        // all return must be an array
+        return array(
+            'getpong'=>'pong - get method',
+            'id'=> $id
+            );
+
     }
 
     public function putPing() {
-		return "pong put";
+
+        // all return must be an array
+		return array(
+            'putpong'=>'pong - put method'
+            );
 	}
 
-    public function testAction($id) {
-        return "test (id: $id)";
-    }
 
-    public function skipAction($name) {
-        return "auth skipped ($name)";
-    }
-    
-    public function getAction() {
-    	return "pong - get method";
-    }
-    
-    public function putAction() {
-    	return "pong - put method";
-    }
-    
-    public function deleteAction() {
-    	return "pong - delete method";
+    public function deletePing() {
+
+         // all return must be an array
+    	return array(
+            'deletepong'=>'pong - delete method'
+            );
+
     }
     
 }

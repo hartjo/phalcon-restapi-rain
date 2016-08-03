@@ -24,9 +24,9 @@
 
 			[
 				'method' => 'get',
-				'route' => 'get/ping',
+				'route' => 'get/ping/{id}',
 				'function' => 'getPing',
-				'authentication' => TRUE
+				'authentication' => FALSE
 			],
 
 			[
@@ -35,6 +35,13 @@
 				'function' => 'putPing',
 				'authentication' => FALSE
 			],
+
+			[
+				'method' => 'delete',
+				'route' => 'delete/ping',
+				'function' => 'deletePing',
+				'authentication' => FALSE
+			]
 
 		]
 	];
