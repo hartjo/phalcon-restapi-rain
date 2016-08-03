@@ -10,13 +10,31 @@ class UsersController extends BaseController
 
 	public function getUser() 
 	{
-		// phalcon default select method a bit slower than custom query method
+
+		/**
+         * phalcon default select method a bit slower than custom query method
+         */
+
+		//find all
 		// $users = Users::find()->toArray();
 
-		//faster than phalcon find method
-        $users = $this->customQuery("SELECT * FROM users LIMIT 4");
+		//find limit 4
 
-        // all return must be an array
+		$users = Users::find(
+			array(
+				"limit" => 4
+				)
+			)->toArray();
+
+		
+		/**
+         * faster than phalcon find method
+         */
+        // $users = $this->customQuery("SELECT * FROM users LIMIT 4");
+
+        /**
+         * all return must be an array
+         */
         return array(
         	'userlist' => $users
         	);
@@ -26,7 +44,9 @@ class UsersController extends BaseController
 	public function saveUser() 
 	{
 
-		// all return must be an array
+		/**
+         * all return must be an array
+         */
 		return array(
         	'Save' => 'Save Use'
         	);

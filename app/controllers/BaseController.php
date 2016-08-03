@@ -7,17 +7,23 @@ use \Phalcon\DI;
 class BaseController extends \Phalcon\DI\Injectable 
 {
 
-	public function customQuery($phql) {
+    /**
+     *  customQuery return all results
+     */
+	public function customQuery($sqlquery) {
 		$dbconnection = $this->db;
-		$stmt = $dbconnection->prepare($phql);
+		$stmt = $dbconnection->prepare($sqlquery);
 		$stmt->execute();
 		$result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 		return $result;
     }
 
-    public function customQueryFirst($phql) {
+    /**
+     *  customQueryFirst return only one result
+     */
+    public function customQueryFirst($sqlquery) {
     	$dbconnection = $this->db;
-    	$stmt = $dbconnection->prepare($phql);
+    	$stmt = $dbconnection->prepare($sqlquery);
     	$stmt->execute();
     	$result = $stmt->fetch(\PDO::FETCH_ASSOC);
     	return $result;
