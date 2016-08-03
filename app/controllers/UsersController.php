@@ -23,7 +23,8 @@ class UsersController extends BaseController
 
 	}
 
-	public function saveUser() {
+	public function saveUser() 
+	{
 
 		// all return must be an array
 		return array(

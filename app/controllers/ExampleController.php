@@ -2,9 +2,11 @@
 
 namespace Controllers;
 
-class ExampleController extends BaseController {
+class ExampleController extends BaseController
+{
 
-	public function postPing() {
+	public function postPing()
+    {
       
 
          // all return must be an array
@@ -14,7 +16,8 @@ class ExampleController extends BaseController {
 
     }
     
-    public function getPing($id) {
+    public function getPing($id)
+    {
 
         // all return must be an array
         return array(
@@ -24,7 +27,8 @@ class ExampleController extends BaseController {
 
     }
 
-    public function putPing() {
+    public function putPing()
+    {
 
         // all return must be an array
 		return array(
@@ -33,7 +37,8 @@ class ExampleController extends BaseController {
 	}
 
 
-    public function deletePing() {
+    public function deletePing() 
+    {
 
          // all return must be an array
     	return array(
