@@ -66,11 +66,6 @@ try {
 	});
 
 	/**
-	 * Http Cache
-	 */
-	$app->response->setHeader('Cache-Control', 'max-age=86400');
-
-	/**
 	 * Before Execute Routes
 	 */
 	$app->before(function () use ($app) {
