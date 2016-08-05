@@ -30,6 +30,10 @@ class JsonResponse{
 		$response = new Response();
 		$response->setJsonContent($responseArray);
 		$response->setStatusCode($code);
+
+		//Starting from now, cache the response page for one day.. comment it to disable
+		$response->setHeader('Cache-Control', 'max-age=86400');
+
 		$response->setHeader('Access-Control-Allow-Origin', '*');
 		$response->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');    
 		$response->setContentType('application/json');

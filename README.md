@@ -2,7 +2,7 @@
 
 Phalcon Restful API that uses Phalcon Micro framework (works with Phalcon 2.0+ and 3.0)
 
-The framework requires PHP 5.4, 5.5, 5.6 and PHP7
+The framework requires PHP 5.4, 5.5, 5.6 or PHP7
 
 ### What is this repository for? ###
 

@@ -19,7 +19,7 @@ class UsersController extends BaseController
 		// $users = Users::find()->toArray();
 
 		//find limit 4
-
+		
 		$users = Users::find(
 			array(
 				"limit" => 4

@@ -18,6 +18,7 @@ require $appDir . '/resources/micro/micro.php';
 require $appDir . '/resources/response/JsonResponse.php';
 require $appDir . '/resources/security/SecurityApp.php';
 require $appDir . '/resources/errors/HTTPException.php';
+require $dir . '/vendor/autoload.php';
 
 $autoLoad = $configPath . 'config.autoload.php';
 $env = $configPath . 'config.env.php';
@@ -64,14 +65,22 @@ try {
 	    return $response;
 	});
 
-	// Before Execute Routes
-	$app->before(function () use ($app) {
+	/**
+	 * Http Cache
+	 */
+	$app->response->setHeader('Cache-Control', 'max-age=86400');
 
+	/**
+	 * Before Execute Routes
+	 */
+	$app->before(function () use ($app) {
 		// authentication logic here
 	    return SecurityApp::jwtAuthentication($app);
 	});
 
-	// After Execute Routes
+	/**
+	 * After Execute Routes
+	 */
 	$app->after(function () use ($app) {
 
 	    $results = $app->getReturnedValue();
@@ -105,7 +114,9 @@ try {
 		
 	});
 
-	// Route NotFound
+	/**
+	 * Route NotFound
+	 */
 	$app->notFound(function () use ($app) {
 
 		throw new HTTPException(
@@ -123,7 +134,7 @@ try {
 	$app->handle();
 
 } catch(Exception $e) {
-	// var_dump($e);
+	
 	JsonResponse::error($e, $e->getCode())->send();
 	return;
 
