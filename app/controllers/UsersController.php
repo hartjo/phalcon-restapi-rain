@@ -20,17 +20,16 @@ class UsersController extends BaseController
 
 		//find limit 4
 		
-		$users = Users::find(
-			array(
-				"limit" => 4
-				)
-			)->toArray();
-
+		// $users = Users::find(
+		// 	array(
+		// 		"limit" => 4
+		// 		)
+		// 	)->toArray();
 		
 		/**
          * faster than phalcon find method
          */
-        // $users = $this->customQuery("SELECT * FROM users LIMIT 4");
+        $users = $this->customQuery("SELECT * FROM users LIMIT 4");
 
         /**
          * all return must be an array

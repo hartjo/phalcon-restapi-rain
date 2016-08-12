@@ -2,15 +2,14 @@
 
 namespace Controllers;
 
-use \Phalcon\DI;
-
 class BaseController extends \Phalcon\DI\Injectable 
 {
 
     /**
      *  customQuery return all results
      */
-	public function customQuery($sqlquery) {
+	public function customQuery($sqlquery)
+    {
 		$dbconnection = $this->db;
 		$stmt = $dbconnection->prepare($sqlquery);
 		$stmt->execute();
@@ -21,7 +20,8 @@ class BaseController extends \Phalcon\DI\Injectable
     /**
      *  customQueryFirst return only one result
      */
-    public function customQueryFirst($sqlquery) {
+    public function customQueryFirst($sqlquery)
+    {
     	$dbconnection = $this->db;
     	$stmt = $dbconnection->prepare($sqlquery);
     	$stmt->execute();

@@ -16,71 +16,30 @@ use Phalcon\Http\Request;
 use Phalcon\DI\FactoryDefault;
 use App\Exceptions\HTTPException;
 
-class Micro extends \Phalcon\Mvc\Micro {
+class Micro extends \Phalcon\Mvc\Micro
+{
 
 	public $appDir;
 
 	protected $_routeAllowed;
 
 	// constuct
-	public function __construct() {
+	public function __construct()
+	{
 		$this->_routeAllowed = array();
 	}
 
-	public function routeAllowed(){
+	public function routeAllowed()
+	{
 		return $this->_routeAllowed;
 	}
 
-	public function setConfig($env) {
-
-		// define Dependency Injector
-		$di = new FactoryDefault();
-
-		// Set request di
-		$di->set("request", new Request());
-
-		// Set Envenronmental Variables
-		$di->set('env', new \Phalcon\Config(require $env));
-
-		// Set database for custom PDO
-		$di->set('db', function() use ($di) {
-
-			$type = strtolower($di->get('env')->database->adapter);
-			$creds = array(
-				'host' => $di->get('env')->database->host,
-				'username' => $di->get('env')->database->username,
-				'password' => $di->get('env')->database->password,
-				'dbname' => $di->get('env')->database->name
-			);
-
-			if ($type == 'mysql') {
-				$connection =  new \Phalcon\Db\Adapter\Pdo\Mysql($creds);
-			} else if ($type == 'postgres') {
-				$connection =  new \Phalcon\Db\Adapter\Pdo\Postgresql($creds);
-			} else if ($type == 'sqlite') {
-				$connection =  new \Phalcon\Db\Adapter\Pdo\Sqlite($creds);
-			} else {
-
-				throw new HTTPException(
-					'Bad Database Adapter',
-					405,
-					array(
-						'dev' => 'Please Check your database adapter .',
-						'internalCode' => 'AD405',
-						'more' => 'use (mysql ,postgres, sqlite)'
-						)
-					);
-			}
-
-			return $connection;
-		});
-		
-	}
-
 	// set autoload components
-	public function setAutoload($file, $appDir) {
+	public function setAutoload($file, $appDir)
+	{
 		
-		if (!file_exists($file)) {
+		if (!file_exists($file))
+		{
 		
 			throw new HTTPException(
 				'Unable to load autoloader file',
@@ -100,8 +59,65 @@ class Micro extends \Phalcon\Mvc\Micro {
 
 	}
 
+	// set Configs
+	public function setConfig($env)
+	{
+
+		// define Dependency Injector
+		$di = new FactoryDefault();
+
+		// Set request di
+		$di->set("request", new Request());
+
+		// Set Envenronmental Variables
+		$di->set('env', new \Phalcon\Config(require $env));
+
+		// Set database for custom PDO
+		$di->set('db', function() use ($di)
+		{
+
+			$type = strtolower($di->get('env')->database->adapter);
+			$creds = array(
+				'host' => $di->get('env')->database->host,
+				'username' => $di->get('env')->database->username,
+				'password' => $di->get('env')->database->password,
+				'dbname' => $di->get('env')->database->name
+			);
+
+			if ($type == 'mysql')
+			{
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Mysql($creds);
+			}
+			else if ($type == 'postgres')
+			{
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Postgresql($creds);
+			}
+			else if ($type == 'sqlite')
+			{
+				$connection =  new \Phalcon\Db\Adapter\Pdo\Sqlite($creds);
+			}
+			else
+			{
+
+				throw new HTTPException(
+					'Bad Database Adapter',
+					405,
+					array(
+						'dev' => 'Please Check your database adapter .',
+						'internalCode' => 'AD405',
+						'more' => 'use (mysql ,postgres, sqlite)'
+						)
+					);
+			}
+
+			return $connection;
+		});
+		
+	}
+
 	//set routes collection
-	public function setRoutes($req) {
+	public function setRoutes($req)
+	{
 
 		$reqUri = $req;
 
@@ -111,15 +127,18 @@ class Micro extends \Phalcon\Mvc\Micro {
 
 		$collectionFiles = scandir($this->appDir . '/resources/routes');
 
-		foreach($collectionFiles as $collectionFile){
+		foreach($collectionFiles as $collectionFile)
+		{
 			$pathinfo = pathinfo($collectionFile);
 
-			if($pathinfo['extension'] === 'php'){
+			if($pathinfo['extension'] === 'php')
+			{
 				
 				$getcollection = include($this->appDir.'/resources/routes/'.$collectionFile);
 				$prefixrplc =  str_replace('/', '',$getcollection['prefix']);
 
-				if($prefixrplc == $getreqPrefix[1]){
+				if($prefixrplc == $getreqPrefix[1])
+				{
 					$collections[] = $this->buildcollection($getcollection);
 				}
 
@@ -134,7 +153,8 @@ class Micro extends \Phalcon\Mvc\Micro {
 	//end of setRoutes
 
 	//build route collection
-	private function buildcollection($route){
+	private function buildcollection($route)
+	{
 
 		$cltn = new Collection();
 
@@ -144,11 +164,13 @@ class Micro extends \Phalcon\Mvc\Micro {
 
 		foreach($route['collection'] as $obj){
 
-			if($obj['authentication']===false){
+			if($obj['authentication']===false)
+			{
 
 				$method = strtolower($obj['method']);
 
-				if (!isset($this->_routeAllowed[$method])) {
+				if (!isset($this->_routeAllowed[$method]))
+				{
 					$this->_routeAllowed[$method] = array();
 				}
 				$this->_routeAllowed[$method][] = $route['prefix'].$obj['route'];

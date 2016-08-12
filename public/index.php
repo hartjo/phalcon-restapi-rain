@@ -12,7 +12,7 @@
 $dir = dirname(__DIR__);
 
 $appDir = $dir . '/app';
-$configPath = $dir . '/config/';
+$configPath = $appDir . '/resources/config/';
 
 require $appDir . '/resources/micro/micro.php';
 require $appDir . '/resources/response/JsonResponse.php';
@@ -28,7 +28,8 @@ use App\Response\JsonResponse;
 use App\Security\SecurityApp;
 use App\Exceptions\HTTPException;
 
-try {
+try
+{
 
 	$app = new Application\Micro();
 
@@ -57,7 +58,8 @@ try {
 	// Define the routes here
 	$app->setRoutes($app->request->getURI());
 
-	$app->options('/([a-z0-9/]+)', function() {
+	$app->options('/([a-z0-9/]+)', function()
+	{
 	    $response = new Response();
 	    $response->setHeader('Access-Control-Allow-Origin', '*');
 	    $response->setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -68,7 +70,8 @@ try {
 	/**
 	 * Before Execute Routes
 	 */
-	$app->before(function () use ($app) {
+	$app->before(function () use ($app)
+	{
 		// authentication logic here
 	    return SecurityApp::jwtAuthentication($app);
 	});
@@ -76,7 +79,8 @@ try {
 	/**
 	 * After Execute Routes
 	 */
-	$app->after(function () use ($app) {
+	$app->after(function () use ($app)
+	{
 
 	    $results = $app->getReturnedValue();
 
@@ -112,7 +116,8 @@ try {
 	/**
 	 * Route NotFound
 	 */
-	$app->notFound(function () use ($app) {
+	$app->notFound(function () use ($app)
+	{
 
 		throw new HTTPException(
 			'There was a problem understanding the data sent to the server by the application.',
@@ -128,7 +133,9 @@ try {
 
 	$app->handle();
 
-} catch(Exception $e) {
+}
+catch(Exception $e)
+{
 	
 	JsonResponse::error($e, $e->getCode())->send();
 	return;
